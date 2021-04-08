@@ -1,34 +1,31 @@
-import React, { Component } from "react";
-import "./../styles/App.css";
-let time = new Date();
-
-export default class App extends Component {
-  constructor(props) {
-    super(props);
+import React, {Component, useState} from "react";
+import '../styles/App.css';
+class App extends Component {
+  constructor() {
+    super();
     this.state = {
-      hours: time.getHours(),
-      minutes: time.getMinutes(),
-      seconds: time.getSeconds()
+      time: new Date().toLocaleTimeString(),
+      interval: ""
     };
+  }
+  componentDidMount() {
+    let id = setInterval(() => {
+      let newTime = new Date().toLocaleTimeString();
+      this.setState({ time: newTime });
+    }, 1000);
+    this.setState({ interval: id });
+  }
+  componentWillUnmount() {
+    clearInterval(this.state.interval);
   }
 
   render() {
     return (
-      <div className="Clock">
-        {this.state.hours}:{this.state.minutes}:{this.state.seconds}{" "}
-        {this.state.hours >= 12 ? "PM" : "AM"}
+      <div classname="Clock">
+        <h3 id="time">{this.state.time}</h3>
       </div>
     );
   }
-
-  componentDidMount() {
-    setInterval(() => {
-      let t = new Date();
-      this.setState({
-        hours: t.getHours(),
-        minutes: t.getMinutes(),
-        seconds: t.getSeconds()
-      });
-    }, 1000);
-  }
 }
+
+export default App;
